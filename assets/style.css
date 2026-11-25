@@ -393,7 +393,8 @@ footer a:hover{color:var(--gold)}
 .auth-loggedin .btn{padding:8px 14px}
 @media(max-width:560px){.auth-gate{padding:24px 18px}.auth-loggedin{justify-content:center;text-align:center}}
 
-/* ============ MOBILE TAP FIX ============ */
+
+/* ============ MOBILE TAP HAMBURGER FIX ============ */
 .hero-overlay{ pointer-events:none !important; }
 .hero-inner{ position:relative; z-index:3; }
 .hero-btns, .hero-btns .btn{ position:relative; z-index:3; }
