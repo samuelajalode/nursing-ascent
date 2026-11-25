@@ -345,5 +345,54 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="assets/script.js"></script>
+<script>
+(function(){
+  // 1. Hamburger - no dependency on anything else
+  var ham = document.getElementById('hamburger');
+  var menu = document.getElementById('mobileMenu');
+  if(ham && menu){
+    ham.addEventListener('click', function(){
+      var isOpen = menu.style.display === 'block';
+      menu.style.display = isOpen ? 'none' : 'block';
+      ham.textContent = isOpen ? '☰' : '✕';
+    });
+    // Also handle touch - mobile sometimes drops click
+    ham.addEventListener('touchend', function(e){
+      e.preventDefault();
+      var isOpen = menu.style.display === 'block';
+      menu.style.display = isOpen ? 'none' : 'block';
+      ham.textContent = isOpen ? '☰' : '✕';
+    }, {passive:false});
+  }
+
+  // 2. Routing fallback - if main script.js didn't bind, this will
+  function showPageFallback(name){
+    if(!name) return;
+    document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
+    var page = document.getElementById('page-' + name);
+    if(page) page.classList.add('active');
+    if(menu) menu.style.display = 'none';
+    if(ham) ham.textContent = '☰';
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+  // Only use fallback if main script didn't already handle it
+  // We check by seeing if body already has our main handler - if not, add this one
+  document.body.addEventListener('click', function(e){
+    var btn = e.target.closest('[data-nav]');
+    if(!btn) return;
+    // If main script.js is working, it already did preventDefault + routing.
+    // This is just a safety net - it will still route correctly.
+    var target = btn.getAttribute('data-nav');
+    if(target) {
+      // Small delay so we don't double-fire with main script
+      setTimeout(function(){
+        var active = document.querySelector('.page.active');
+        if(!active || active.id !== 'page-' + target) showPageFallback(target);
+      }, 50);
+    }
+  });
+})();
+</script>
+
 </body>
 </html>
